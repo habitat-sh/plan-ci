@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+echo "Downloading pre existing configuration"
+aws --region ${AWS_DEFAULT_REGION:?required} s3 cp s3://${AWS_BUCKET:?required}/${MACHINE_NAME:?required}.zip ./ > /dev/null 2>&1 || exit 0
+
+echo "Pre-existing configuration found"
+echo "Importing ${MACHINE_NAME}"
+machine-import ${MACHINE_NAME}.zip
+# The permission isn't set properly on import
+chmod 0600 /root/.docker/machine/machines/${MACHINE_NAME}/id_rsa
+
+echo "deleting pre-existing machine"
+docker-machine rm -y ${MACHINE_NAME}
+
+aws --region ${AWS_DEFAULT_REGION} s3 rm s3://${AWS_BUCKET}/${MACHINE_NAME}.zip

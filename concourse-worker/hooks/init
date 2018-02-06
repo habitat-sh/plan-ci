@@ -1,0 +1,8 @@
+#!{{pkgPathFor "core/bash"}}/bin/bash -xe
+#
+exec 2>&1
+
+
+#hab pkg binlink core/iptables
+#hab pkg binlink core/bash
+#hab pkg binlink core/findutils

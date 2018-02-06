@@ -1,0 +1,36 @@
+#!/bin/sh
+
+set -e
+
+/delete-machine
+
+echo "Deleting key pair ${MACHINE_NAME:?required}, if exists..."
+aws ec2 delete-key-pair --key-name ${MACHINE_NAME} --region ${AWS_DEFAULT_REGION:?required}
+
+# For supported configuration see https://docs.docker.com/machine/drivers/aws/
+
+: ${AWS_ACCESS_KEY_ID:?required}
+: ${AWS_SECRET_ACCESS_KEY:?required}
+
+echo "Creating docker-machine ${MACHINE_NAME:?required}"
+echo docker-machine create -d amazonec2 ${MACHINE_NAME}
+echo with env vars:
+env | grep AWS | grep -v SECRET | sort
+
+docker-machine create -d amazonec2 ${MACHINE_NAME}
+
+echo "Exporting connection info to ${MACHINE_NAME}"
+machine-export ${MACHINE_NAME}
+
+echo "Uploading info to bucket"
+aws --region ${AWS_DEFAULT_REGION} s3 cp ${MACHINE_NAME}.zip s3://${AWS_BUCKET:?required}
+
+if [ ! -z ${OPEN_TCP_PORTS} ]; then
+  echo "Opening access to docker machine on tcp ports ${OPEN_TCP_PORTS}"
+  aws ec2 authorize-security-group-ingress --group-name ${AWS_SECURITY_GROUP} --protocol tcp --port ${OPEN_TCP_PORTS} --cidr 0.0.0.0/0
+fi
+
+if [ ! -z ${OPEN_UDP_PORTS} ]; then
+  echo "Opening access to docker machine on udp ports ${OPEN_UDP_PORTS}"
+  aws ec2 authorize-security-group-ingress --group-name ${AWS_SECURITY_GROUP} --protocol udp --port ${OPEN_UDP_PORTS} --cidr 0.0.0.0/0
+fi

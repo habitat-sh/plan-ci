@@ -1,0 +1,93 @@
+---
+meta:
+  delmo:
+    machine_name: habitat-plans-pipeline-machine
+
+  github:
+    ci_auth_token: REDACTED
+
+  dockerhub:
+    email: REDACTED
+    username: REDACTED
+    password: REDACTED
+
+  habitat:
+    origin_key: REDACTED
+    auth_token: REDACTED
+    origin: eeyun
+
+  aws:
+    docker-machine-bucket: docker-machine-bucket
+    access_key_id: REDACTED
+    secret_access_key: REDACTED
+    region: us-east-1
+
+groups:
+- name: images
+  jobs: [build-hab-ci, build-hab-delmo, build-docker-machine-setup]
+
+jobs:
+- name: build-hab-ci
+  plan:
+    - {get: hab-ci-setup, trigger: true}
+    - put: hab-ci-image
+      params:
+        build: hab-ci-setup/images/hab-ci
+
+- name: build-hab-delmo
+  plan:
+    - {get: hab-delmo-setup, trigger: true}
+    - put: hab-delmo-image
+      params:
+        build: hab-delmo-setup/images/hab-delmo
+
+- name: build-docker-machine-setup
+  plan:
+    - {get: docker-machine-setup, trigger: true}
+    - put: docker-machine-setup-image
+      params:
+        build: docker-machine-setup/images/docker-machine-setup
+
+resources:
+
+- name: hab-ci-setup
+  type: git
+  source:
+    uri: https://github.com/eeyun/hab-ci
+    paths: [images/hab-ci/*]
+
+- name: docker-machine-setup
+  type: git
+  source:
+    uri: https://github.com/eeyun/hab-ci
+    paths: [images/docker-machine-setup/*]
+
+- name: hab-delmo-setup
+  type: git
+  source:
+    uri: https://github.com/eeyun/hab-ci
+    paths: [images/hab-delmo/*]
+
+- name: hab-ci-image
+  type: docker-image
+  source:
+    email: (( grab meta.dockerhub.email ))
+    username: (( grab meta.dockerhub.username ))
+    password: (( grab meta.dockerhub.password ))
+    repository: eeyun/hab-ci
+
+- name: docker-machine-setup-image
+  type: docker-image
+  source:
+    email: (( grab meta.dockerhub.email ))
+    username: (( grab meta.dockerhub.username ))
+    password: (( grab meta.dockerhub.password ))
+    repository: eeyun/docker-machine-setup
+
+- name: hab-delmo-image
+  type: docker-image
+  source:
+    email: (( grab meta.dockerhub.email ))
+    username: (( grab meta.dockerhub.username ))
+    password: (( grab meta.dockerhub.password ))
+    repository: eeyun/hab-delmo
