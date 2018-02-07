@@ -4,7 +4,7 @@ This habitat package consumes the concourse binaries made available by core/conc
 
 ### Dependent services:
 
-* Postgresql (bound as "concoursedb": --bind concoursedb:postgresql.default --peer f.o.o.i.p)
+* Postgresql (bound as "database" `--bind database:postgresql.default --peer f.o.o.i.p`)
 * concourse-worker (No binding from web -> worker however concourse web cannot function without workers)
 
 
