@@ -1,5 +1,5 @@
 pkg_name=concourse-worker
-pkg_origin=eeyun
+pkg_origin=habitat
 pkg_version="0.1.0"
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 pkg_license=('Apache-2.0')
