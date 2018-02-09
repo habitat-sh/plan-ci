@@ -66,19 +66,19 @@ resources:
 - name: hab-ci-setup
   type: git
   source:
-    uri: https://github.com/eeyun/hab-ci
+    uri: https://github.com/habitat-sh/plan-ci
     paths: [images/hab-ci/*]
 
 - name: docker-machine-setup
   type: git
   source:
-    uri: https://github.com/eeyun/hab-ci
+    uri: https://github.com/habitat-sh/plan-ci
     paths: [images/docker-machine-setup/*]
 
 - name: hab-delmo-setup
   type: git
   source:
-    uri: https://github.com/eeyun/hab-ci
+    uri: https://github.com/habitat-sh/plan-ci
     paths: [images/hab-delmo/*]
 
 - name: hab-ci-image
@@ -87,7 +87,7 @@ resources:
     email: (( grab meta.dockerhub.email ))
     username: (( grab meta.dockerhub.username ))
     password: (( grab meta.dockerhub.password ))
-    repository: eeyun/hab-ci
+    repository: habitat/hab-ci
 
 - name: docker-machine-setup-image
   type: docker-image
@@ -95,7 +95,7 @@ resources:
     email: (( grab meta.dockerhub.email ))
     username: (( grab meta.dockerhub.username ))
     password: (( grab meta.dockerhub.password ))
-    repository: eeyun/docker-machine-setup
+    repository: habitat/docker-machine-setup
 
 - name: hab-delmo-image
   type: docker-image
@@ -103,14 +103,7 @@ resources:
     email: (( grab meta.dockerhub.email ))
     username: (( grab meta.dockerhub.username ))
     password: (( grab meta.dockerhub.password ))
-    repository: eeyun/hab-delmo
-
-- name: habitat-release
-  type: github-release
-  source:
-    user:         habitat-sh
-    repository:   habitat
-    access_token: (( grab meta.github.ci_auth_token ))
+    repository: habitat/hab-delmo
 
 - name: habitat-plans-pipeline
   type: git
@@ -124,4 +117,11 @@ resources:
     email: (( grab meta.dockerhub.email ))
     username: (( grab meta.dockerhub.username ))
     password: (( grab meta.dockerhub.password ))
-    repository: eeyun/habitat-plans-pipeline
+    repository: habitat/habitat-plans-pipeline
+
+- name: habitat-release
+  type: github-release
+  source:
+    user:         habitat-sh
+    repository:   habitat
+    access_token: (( grab meta.github.ci_auth_token ))
