@@ -14,7 +14,7 @@ meta:
   habitat:
     origin_key: REDACTED
     auth_token: REDACTED
-    origin: eeyun
+    origin: core
 
   aws:
     docker-machine-bucket: docker-machine-bucket
@@ -22,9 +22,10 @@ meta:
     secret_access_key: REDACTED
     region: us-east-1
 
+
 groups:
 - name: images
-  jobs: [build-hab-ci, build-hab-delmo, build-docker-machine-setup]
+  jobs: [build-hab-ci, build-hab-delmo, build-docker-machine-setup, build-habitat-plans-pipeline-image]
 
 jobs:
 - name: build-hab-ci
@@ -47,6 +48,18 @@ jobs:
     - put: docker-machine-setup-image
       params:
         build: docker-machine-setup/images/docker-machine-setup
+
+- name: build-habitat-plans-pipeline-image
+  public: true
+  plan:
+  - aggregate:
+    - {get: habitat-plans-pipeline, trigger: true}
+    - {get: habitat-release, trigger: true}
+  - put: habitat-plans-pipeline-image
+    params:
+      build: habitat-plans-pipeline/images/habitat-plans-pipeline
+      tag: habitat-release/version
+      tag_as_latest: true
 
 resources:
 
@@ -91,3 +104,24 @@ resources:
     username: (( grab meta.dockerhub.username ))
     password: (( grab meta.dockerhub.password ))
     repository: eeyun/hab-delmo
+
+- name: habitat-release
+  type: github-release
+  source:
+    user:         habitat-sh
+    repository:   habitat
+    access_token: (( grab meta.github.ci_auth_token ))
+
+- name: habitat-plans-pipeline
+  type: git
+  source:
+    uri: https://github.com/habitat-sh/plan-ci.git
+    paths: [images/habitat-plans-pipeline/*]
+
+- name: habitat-plans-pipeline-image
+  type: docker-image
+  source:
+    email: (( grab meta.dockerhub.email ))
+    username: (( grab meta.dockerhub.username ))
+    password: (( grab meta.dockerhub.password ))
+    repository: eeyun/habitat-plans-pipeline
