@@ -11,6 +11,7 @@ concourse worker \
 {{#if bind.web ~}}
 {{#with bind.web.first as |web| }}
   --tsa-host {{web.sys.ip}} \
+{{~/with}}
 {{else ~}}
   --tsa-host 127.0.0.1 \
 {{/if ~}}
