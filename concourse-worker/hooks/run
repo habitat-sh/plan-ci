@@ -7,13 +7,13 @@ source "{{pkg.svc_config_path}}/config.sh"
 cd {{pkg.svc_path}}
 
 concourse worker \
-  --work-dir {{pkg.svc_var_path}} \
-{{#if bind.web ~}}
-{{#with bind.web.first as |web| }}
-  --tsa-host {{web.sys.ip}} \
-{{~/with}}
-{{else ~}}
-  --tsa-host 127.0.0.1 \
-{{/if ~}}
-  --tsa-public-key {{pkg.svc_files_path}}/tsa_host_key.pub \
-  --tsa-worker-private-key {{pkg.svc_files_path}}/worker_key
+ --work-dir {{pkg.svc_var_path}} \
+ {{~#if bind.web ~}}
+ {{#with bind.web.first as |web| }}
+ --tsa-host {{web.sys.ip}} \
+ {{/with ~}}
+ {{else ~}}
+ --tsa-host 127.0.0.1 \
+ {{/if ~}}
+ --tsa-public-key {{pkg.svc_files_path}}/tsa_host_key.pub \
+ --tsa-worker-private-key {{pkg.svc_files_path}}/worker_key
