@@ -2,4 +2,4 @@
 #
 exec 2>&1
 
-mkdir -p /opt/concourse/worker
+mkdir -p {{cfg.work_dir}}
