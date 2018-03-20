@@ -7,7 +7,7 @@ source "{{pkg.svc_config_path}}/config.sh"
 cd {{pkg.svc_path}}
 
 concourse worker \
- --work-dir {{pkg.svc_var_path}} \
+ --work-dir {{cfg.work_dir}} \
  {{~#if bind.web ~}}
  {{#with bind.web.first as |web| }}
  --tsa-host {{web.sys.ip}} \
