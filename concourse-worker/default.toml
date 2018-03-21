@@ -1,4 +1,4 @@
+work_dir = "/opt/concourse/worker"
+
 [ports]
 web = "8080"
-
-work_dir = "/opt/concourse/worker"
