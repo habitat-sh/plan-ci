@@ -7,4 +7,4 @@ export CONCOURSE_TSA_HOST="{{web.sys.ip}}:2222"
 {{else ~}}
 export CONCOURSE_TSA_HOST="localhost"
 {{/if ~}}
-export CONCOURSE_BAGGAGECLAIM_DRIVER="overlay"
+export CONCOURSE_BAGGAGECLAIM_DRIVER="naive"
