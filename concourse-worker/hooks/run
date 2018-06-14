@@ -10,10 +10,10 @@ concourse worker \
  --work-dir {{cfg.work_dir}} \
  {{~#if bind.web ~}}
  {{#with bind.web.first as |web| }}
- --tsa-host {{web.sys.ip}} \
+ --tsa-host {{web.sys.ip}}:2222 \
  {{/with ~}}
  {{else ~}}
- --tsa-host 127.0.0.1 \
+ --tsa-host 127.0.0.1:2222 \
  {{/if ~}}
  --tsa-public-key {{pkg.svc_files_path}}/tsa_host_key.pub \
  --tsa-worker-private-key {{pkg.svc_files_path}}/worker_key
