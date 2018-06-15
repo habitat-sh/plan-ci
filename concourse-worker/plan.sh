@@ -9,7 +9,7 @@ pkg_svc_group="root"
 pkg_svc_user="root"
 pkg_deps=(core/concourse core/iptables core/bash core/findutils)
 pkg_binds_optional=(
-   [web]="host"
+   [web]="web_port"
 )
 
 do_build(){
