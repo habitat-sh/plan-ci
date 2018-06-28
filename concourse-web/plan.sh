@@ -13,7 +13,7 @@ pkg_exports=(
 )
 pkg_exposes=(web_port)
 pkg_binds_optional=(
-   [database]="web_port host"
+   [database]="port"
 )
 
 do_build(){
