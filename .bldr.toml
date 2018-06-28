@@ -1,0 +1,5 @@
+[concourse-web]
+plan_path = "concourse-web"
+[concourse-worker]
+plan_path = "concourse-worker"
+
